@@ -1,8 +1,16 @@
 package com.project.yjshop.domain.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
-
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "user")
 public class User {
 
@@ -21,5 +29,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 }
