@@ -11,6 +11,8 @@ public enum ErrorCode {
 
     USER_ALREADY_EXISTS(409, "User Already Exists"),
     USER_NOT_FOUND(404, "User Not Found"),
+    USERNAME_NOT_FOUND(404, "UserName Not Found"),
+    LOGIN_FAILED(400, "Login Failed"),
     JOIN_FAILED(400, "Join Failed");
 
     private final int status;
