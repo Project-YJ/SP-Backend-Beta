@@ -5,20 +5,20 @@ import com.project.yjshop.domain.user.UserRepository;
 import com.project.yjshop.domain.user.UserRole;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
+import com.project.yjshop.security.jwt.JwtTokenProvider;
 import com.project.yjshop.web.payload.request.auth.JoinRequest;
 import com.project.yjshop.web.payload.request.auth.LoginRequest;
 import com.project.yjshop.web.payload.response.auth.JoinResponse;
-import com.project.yjshop.web.payload.response.auth.LoginResponse;
+import com.project.yjshop.web.payload.response.auth.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +26,10 @@ public class AuthServiceImpl implements AuthService{
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final JwtTokenProvider tokenProvider;
 
     @Override
+    @Transactional
     public JoinResponse join(JoinRequest joinRequest, BindingResult binding) {
 
         if(binding.hasErrors()) {
@@ -59,11 +61,23 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public LoginResponse login(LoginRequest loginRequest, BindingResult bindingResult) {
-        Optional<User> userEntity= userRepository.findByUserid(loginRequest.getUserid());
-        if(!passwordEncoder.matches(loginRequest.getPassword(), userEntity.get().getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    @Transactional
+    public TokenDto login(LoginRequest loginRequest, BindingResult binding) {
+        if(binding.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            for(FieldError error: binding.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            throw new CustomException(ErrorCode.LOGIN_FAILED, errorMap);
+        } else {
+            User userEntity = userRepository.findByUserid(loginRequest.getUserid())
+                    .orElseThrow(()-> new CustomException(ErrorCode.USERNAME_NOT_FOUND));
+            if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
+                throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            }
+            return tokenProvider.createToken(loginRequest.getUserid());
         }
-        return null;
     }
+
 }
