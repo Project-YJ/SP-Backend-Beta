@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class JoinResponse {
-    private Long pk;
+public class CustomResponse<T> {
     private String message;
+    private T key;
 }
