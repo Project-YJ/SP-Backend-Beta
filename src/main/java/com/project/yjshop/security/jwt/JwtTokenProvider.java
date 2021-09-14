@@ -1,10 +1,12 @@
 package com.project.yjshop.security.jwt;
 
+import com.project.yjshop.domain.token.RefreshToken;
+import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.domain.user.UserRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
 import com.project.yjshop.security.auth.PrincipalDetailsService;
-import com.project.yjshop.web.payload.response.auth.TokenDto;
+import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,17 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PrincipalDetailsService principalDetailsService;
 
     @Value("${jwt.secret}")
@@ -36,22 +35,32 @@ public class JwtTokenProvider {
     @Value("${jwt.header}")
     private String header;
 
-    public TokenDto createToken(String username) {
+    @Value("${jwt.access}")
+    private Long acc_time;
+
+    @Value("${jwt.refresh}")
+    private Long ref_time;
+
+    public TokenResponse createToken(String username) {
 
         Date now = new Date();
         String accessToken =Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(username))
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(1).toMillis()))
+                .setExpiration(new Date(now.getTime() + acc_time))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now.getTime() + Duration.ofDays(1).toMillis()))
-                .setClaims(Jwts.claims().setSubject(secretKey))
+                .setExpiration(new Date(now.getTime() + ref_time))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
-        return TokenDto.builder()
+        refreshTokenRepository.save(RefreshToken.builder()
+                .token(refreshToken)
+                .build());
+
+        return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
