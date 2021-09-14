@@ -1,6 +1,5 @@
 package com.project.yjshop.security.jwt;
 
-import com.project.yjshop.error.CMRespDto;
 import com.project.yjshop.error.exception.CustomException;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
@@ -23,6 +21,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             JSONObject write = new JSONObject();
             write.put("message", e.getErrorCode().getMessage());
             write.put("error", e.getErrorMap());
+
+            response.setContentType("application/json");
             response.setStatus(e.getErrorCode().getStatus());
             response.getWriter().write(write.toJSONString());
         }

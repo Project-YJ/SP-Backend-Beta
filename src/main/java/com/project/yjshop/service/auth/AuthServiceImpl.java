@@ -1,5 +1,7 @@
 package com.project.yjshop.service.auth;
 
+import com.project.yjshop.domain.token.RefreshToken;
+import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.domain.user.User;
 import com.project.yjshop.domain.user.UserRepository;
 import com.project.yjshop.domain.user.UserRole;
@@ -8,8 +10,8 @@ import com.project.yjshop.error.exception.CustomException;
 import com.project.yjshop.security.jwt.JwtTokenProvider;
 import com.project.yjshop.web.payload.request.auth.JoinRequest;
 import com.project.yjshop.web.payload.request.auth.LoginRequest;
-import com.project.yjshop.web.payload.response.auth.JoinResponse;
-import com.project.yjshop.web.payload.response.auth.TokenDto;
+import com.project.yjshop.web.payload.response.auth.CustomResponse;
+import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,12 +27,13 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService{
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     @Transactional
-    public JoinResponse join(JoinRequest joinRequest, BindingResult binding) {
+    public CustomResponse<?> join(JoinRequest joinRequest, BindingResult binding) {
 
         if(binding.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -53,8 +56,8 @@ public class AuthServiceImpl implements AuthService{
                             .role(UserRole.USER)
                             .build());
 
-            return JoinResponse.builder()
-                    .pk(userRepository.findByUserid(joinRequest.getUserid()).get().getId())
+            return CustomResponse.builder()
+                    .key(userRepository.findByUserid(joinRequest.getUserid()).get().getId())
                     .message("회원가입 성공")
                     .build();
         }
@@ -62,7 +65,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     @Transactional
-    public TokenDto login(LoginRequest loginRequest, BindingResult binding) {
+    public TokenResponse login(LoginRequest loginRequest, BindingResult binding) {
         if(binding.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
@@ -78,6 +81,13 @@ public class AuthServiceImpl implements AuthService{
             }
             return tokenProvider.createToken(loginRequest.getUserid());
         }
+    }
+
+    @Override
+    public TokenResponse reissue(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(token).get();
+        System.out.println(refreshToken);
+        return null;
     }
 
 }
