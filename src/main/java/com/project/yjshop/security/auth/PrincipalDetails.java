@@ -2,6 +2,7 @@ package com.project.yjshop.security.auth;
 
 import com.project.yjshop.domain.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class PrincipalDetails implements UserDetails {
 
