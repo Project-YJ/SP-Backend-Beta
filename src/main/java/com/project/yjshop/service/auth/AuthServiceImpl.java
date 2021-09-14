@@ -72,7 +72,7 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomException(ErrorCode.LOGIN_FAILED, errorMap);
         } else {
             User userEntity = userRepository.findByUserid(loginRequest.getUserid())
-                    .orElseThrow(()-> new CustomException(ErrorCode.USERNAME_NOT_FOUND));
+                    .orElseThrow(()-> new CustomException(ErrorCode.USERID_NOT_FOUND));
             if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
                 throw new CustomException(ErrorCode.INVALID_PASSWORD);
             }
