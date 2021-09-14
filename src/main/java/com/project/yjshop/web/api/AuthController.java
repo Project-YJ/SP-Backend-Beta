@@ -27,6 +27,6 @@ public class AuthController {
     @PostMapping("/login")
     public TokenDto loginUser(@RequestBody @Valid LoginRequest loginRequest,
                               BindingResult binding) {
-        return null;
+        return authService.login(loginRequest, binding);
     }
 }
