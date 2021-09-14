@@ -1,6 +1,9 @@
 package com.project.yjshop.security.auth;
 
+import com.project.yjshop.domain.user.User;
 import com.project.yjshop.domain.user.UserRepository;
+import com.project.yjshop.error.ErrorCode;
+import com.project.yjshop.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +17,8 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        User user = userRepository.findByUserid(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USERNAME_NOT_FOUND));
+        return PrincipalDetails.builder().build();
     }
 }
