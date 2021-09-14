@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider tokenProvider;
+    private final ForbiddenHandler forbiddenHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,9 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
+                .exceptionHandling()
+                .accessDeniedHandler(forbiddenHandler)
+
+                .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/test/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
+
                 .and()
                 .addFilterBefore(
                         new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class
