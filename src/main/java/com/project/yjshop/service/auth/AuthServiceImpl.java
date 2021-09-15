@@ -13,6 +13,7 @@ import com.project.yjshop.web.payload.request.auth.LoginRequest;
 import com.project.yjshop.web.payload.response.auth.CustomResponse;
 import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,26 +25,29 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Value("${jwt.refresh}")
+    private Long ref_time;
+
     @Override
     @Transactional
     public CustomResponse<?> join(JoinRequest joinRequest, BindingResult binding) {
 
-        if(binding.hasErrors()) {
+        if (binding.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
-            for(FieldError error: binding.getFieldErrors()) {
+            for (FieldError error : binding.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             throw new CustomException(ErrorCode.JOIN_FAILED, errorMap);
         } else {
-            if(userRepository.existsByUseridOrNickname(joinRequest.getUserid(), joinRequest.getNickname())) {
+            if (userRepository.existsByUseridOrNickname(joinRequest.getUserid(), joinRequest.getNickname())) {
                 throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
             }
 
@@ -66,16 +70,16 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public TokenResponse login(LoginRequest loginRequest, BindingResult binding) {
-        if(binding.hasErrors()) {
+        if (binding.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
-            for(FieldError error: binding.getFieldErrors()) {
+            for (FieldError error : binding.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             throw new CustomException(ErrorCode.LOGIN_FAILED, errorMap);
         } else {
             User userEntity = userRepository.findByUserid(loginRequest.getUserid())
-                    .orElseThrow(()-> new CustomException(ErrorCode.USERID_NOT_FOUND));
+                    .orElseThrow(() -> new CustomException(ErrorCode.USERID_NOT_FOUND));
             if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
                 throw new CustomException(ErrorCode.INVALID_PASSWORD);
             }
@@ -85,9 +89,14 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public TokenResponse reissue(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token).get();
-        System.out.println(refreshToken);
+        if (tokenProvider.validateToken(token) && tokenProvider.isRefresh(token)) {
+            RefreshToken refreshToken = refreshTokenRepository.findByToken(token).get();
+            refreshToken.update(ref_time);
+            return TokenResponse.builder()
+                    .accessToken(tokenProvider.createAccess(refreshToken.getUsername()))
+                    .refreshToken(token)
+                    .build();
+        }
         return null;
     }
-
 }
