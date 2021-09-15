@@ -1,19 +1,18 @@
 package com.project.yjshop.domain.token;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import javax.persistence.Id;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash(value = "refresh")
+@RedisHash(value = "refresh", timeToLive = 1000)
 public class RefreshToken {
 
     @Id
@@ -21,6 +20,12 @@ public class RefreshToken {
 
     @Indexed
     private String token;
+    private String username;
 
+    @TimeToLive
+    private Long refreshExp;
 
+    public void update(Long refreshExp) {
+        this.refreshExp = refreshExp;
+    }
 }
