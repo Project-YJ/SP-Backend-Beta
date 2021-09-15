@@ -41,23 +41,39 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh}")
     private Long ref_time;
 
-    public TokenResponse createToken(String username) {
+    public boolean isRefresh(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("type").equals("refresh");
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.NOT_REFRESH);
+        }
+    }
 
+    public String createAccess(String username) {
         Date now = new Date();
-        String accessToken =Jwts.builder()
+        return Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(username))
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + acc_time))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public TokenResponse createToken(String username) {
+
+        Date now = new Date();
+        String accessToken = createAccess(username);
 
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now.getTime() + ref_time))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
+                .claim("type", "refresh")
                 .compact();
 
         refreshTokenRepository.save(RefreshToken.builder()
                 .token(refreshToken)
+                .username(username)
+                .refreshExp(ref_time)
                 .build());
 
         return TokenResponse.builder()
