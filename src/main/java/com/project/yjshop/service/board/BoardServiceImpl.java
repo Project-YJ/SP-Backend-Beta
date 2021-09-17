@@ -43,7 +43,19 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ProductResponse deleting(String boardId) {
-        return null;
+    public ProductResponse deleting(Long boardId) {
+        Board delBoard = boardRepository.findById(boardId).get();
+        s3Service.delete(delBoard.getTitleImage().getImagePath());
+        boardRepository.delete(delBoard);
+
+        return ProductResponse.builder()
+                .message("Delete success")
+                .product(ProductResponse.Product.builder()
+                        .boardId(delBoard.getId())
+                        .title(delBoard.getTitle())
+                        .titleImage(delBoard.getTitleImage().getImageFullPath())
+                        .price(delBoard.getPrice())
+                        .build())
+                .build();
     }
 }
