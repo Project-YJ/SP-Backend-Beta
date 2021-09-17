@@ -20,8 +20,15 @@ public class ImageServiceImpl implements ImageService{
     public String imageUpload(String imagePath) {
         imageRepository.save(Image.builder()
                 .imagePath(imagePath)
-                .imageFullPath("https://" + cloudFront + "/" + imagePath)
+                .imageFullPath(getFullPath(imagePath))
                 .build());
         return imagePath;
     }
+
+    @Override
+    public String getFullPath(String path) {
+        return "https://" + cloudFront + "/" + path;
+    }
+
+
 }

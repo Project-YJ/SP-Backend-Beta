@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-public class ImageController {
+public class ImageTestController {
     private final S3Service s3Service;
     private final ImageServiceImpl imageService;
 

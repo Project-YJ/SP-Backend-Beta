@@ -3,14 +3,16 @@ package com.project.yjshop.domain.image;
 import com.project.yjshop.domain.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Builder
-@Entity
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Image {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
