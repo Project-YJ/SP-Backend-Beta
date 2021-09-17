@@ -88,10 +88,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenResponse reissue(String token) {
         if (tokenProvider.validateToken(token) && tokenProvider.isRefresh(token)) {
             RefreshToken refreshToken = refreshTokenRepository.findByToken(token).get();
-            refreshToken.update(ref_time);
+//            refreshToken.update(ref_time);
             return TokenResponse.builder()
                     .accessToken(tokenProvider.createAccess(refreshToken.getUsername()))
                     .refreshToken(token)

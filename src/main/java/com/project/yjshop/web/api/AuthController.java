@@ -1,5 +1,6 @@
 package com.project.yjshop.web.api;
 
+import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.service.auth.AuthServiceImpl;
 import com.project.yjshop.web.payload.request.auth.JoinRequest;
 import com.project.yjshop.web.payload.request.auth.LoginRequest;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthServiceImpl authService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/join")
     public CustomResponse<?> joinUser(@RequestBody @Valid JoinRequest joinRequest,
