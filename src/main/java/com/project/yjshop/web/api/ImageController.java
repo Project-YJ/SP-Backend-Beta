@@ -1,0 +1,29 @@
+package com.project.yjshop.web.api;
+
+import com.project.yjshop.domain.image.ImageRepository;
+import com.project.yjshop.service.image.ImageService;
+import com.project.yjshop.service.image.ImageServiceImpl;
+import com.project.yjshop.service.image.S3Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+@RequiredArgsConstructor
+@RestController
+public class ImageController {
+    private final S3Service s3Service;
+    private final ImageServiceImpl imageService;
+
+    @PostMapping("upload")
+    public String imageUpload(@ModelAttribute MultipartFile image) throws IOException {
+        String imagePath = s3Service.upload(image);
+        return imageService.imageUpload(imagePath);
+    }
+
+    @DeleteMapping("delete")
+    public String imageDelete(@RequestParam(name = "imagePath") String imagePath) throws IOException {
+        return s3Service.delete(imagePath);
+    }
+}
