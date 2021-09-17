@@ -2,25 +2,30 @@ package com.project.yjshop.domain.board;
 
 import com.project.yjshop.domain.image.Image;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
     private String title;
-    private String price;
-    
+
+    private Long price;
+
     @OneToOne
     private Image titleImage;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<Image> images;
 }
