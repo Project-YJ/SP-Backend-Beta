@@ -8,5 +8,5 @@ import java.io.IOException;
 
 public interface BoardService {
     ProductResponse posting(ProductRequest productRequest) throws IOException;
-    ProductResponse deleting(String boardId);
+    ProductResponse deleting(Long boardId);
 }

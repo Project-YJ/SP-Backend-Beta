@@ -14,8 +14,8 @@ public class ProductResponse {
     private final Product product;
 
     @Builder
-    @AllArgsConstructor @NoArgsConstructor
-    public class Product {
+    @Data
+    public static class Product {
         private Long boardId;
         private String title;
         private String titleImage;

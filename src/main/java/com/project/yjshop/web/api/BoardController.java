@@ -25,7 +25,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardId}")
-    public String delProduct(@PathVariable int boardId) {
-        return boardService
+    public ProductResponse delProduct(@PathVariable Long boardId) {
+        return boardService.deleting(boardId);
     }
 }
