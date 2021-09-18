@@ -2,9 +2,11 @@ package com.project.yjshop.web.api;
 
 import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
-import com.project.yjshop.domain.user.User;
 import com.project.yjshop.domain.user.UserRepository;
+import com.project.yjshop.domain.user.UserRole;
+import com.project.yjshop.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,5 +40,10 @@ public class Test {
     public String money() {
         userRepository.findById(1L).get().plusMoney(100000L);
         return null;
+    }
+
+    @GetMapping("role")
+    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails.getUser().getRole().getKey();
     }
 }

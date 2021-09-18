@@ -23,10 +23,8 @@ public class RefreshToken {
     private String token;
     private String username;
 
-//    @TimeToLive
-//    private Long refreshExp;
-//
-//    public void update(Long refreshExp) {
-//        this.refreshExp = refreshExp;
-//    }
+    @TimeToLive
+    private Long delTime;
+
+    public void resetTime(Long delTime) { this.delTime = delTime; }
 }

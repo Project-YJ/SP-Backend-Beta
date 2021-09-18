@@ -1,5 +1,6 @@
 package com.project.yjshop.domain.image;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.yjshop.domain.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"board"})
 @Entity
 public class Image {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

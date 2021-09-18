@@ -73,7 +73,7 @@ public class JwtTokenProvider {
         refreshTokenRepository.save(RefreshToken.builder()
                 .token(refreshToken)
                 .username(username)
-//                .refreshExp(ref_time)
+                .delTime(ref_time/1000)
                 .build());
 
         return TokenResponse.builder()

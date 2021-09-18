@@ -39,4 +39,7 @@ public class User {
     public void plusMoney(Long money) {
         this.money += money;
     }
+    public Long removeMoney(Long money) {
+        return this.money -= money;
+    }
 }

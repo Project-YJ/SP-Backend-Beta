@@ -12,12 +12,14 @@ import com.project.yjshop.web.payload.request.board.ProductRequest;
 import com.project.yjshop.web.payload.response.board.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class BoardServiceImpl implements BoardService{
     private final S3Service s3Service;
 
     @Override
+    @Transactional
     public ProductResponse posting(ProductRequest productRequest,
                                    BindingResult bindingResult,
                                    PrincipalDetails principalDetails) throws IOException {
@@ -49,6 +52,7 @@ public class BoardServiceImpl implements BoardService{
                     .price(productRequest.getPrice())
                     .count(productRequest.getCount())
                     .user(principalDetails.getUser())
+                    .totalRevenue(0L)
                     .build());
 
             return ProductResponse.builder()
@@ -65,13 +69,14 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional
     public ProductResponse deleting(Long boardId, PrincipalDetails principalDetails) {
-        Board delBoard = boardRepository.findById(boardId).get();
+
+        Board delBoard = boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         if(principalDetails.getUser().getId() != delBoard.getUser().getId()) {
             throw new CustomException(ErrorCode.USER_NOT_MATCH);
         }
-
 
         s3Service.delete(delBoard.getTitleImage().getImagePath());
         boardRepository.delete(delBoard);
@@ -86,5 +91,11 @@ public class BoardServiceImpl implements BoardService{
                         .count(delBoard.getCount())
                         .build())
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Board> findAll() {
+        return boardRepository.findAll();
     }
 }

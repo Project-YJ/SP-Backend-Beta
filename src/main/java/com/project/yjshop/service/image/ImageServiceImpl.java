@@ -5,6 +5,7 @@ import com.project.yjshop.domain.image.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class ImageServiceImpl implements ImageService{
     private String cloudFront;
 
     @Override
+    @Transactional
     public String imageUpload(String imagePath) {
         imageRepository.save(Image.builder()
                 .imagePath(imagePath)

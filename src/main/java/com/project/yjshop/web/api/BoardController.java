@@ -1,6 +1,7 @@
 package com.project.yjshop.web.api;
 
 import com.project.yjshop.domain.board.Board;
+import com.project.yjshop.domain.board.BoardRepository;
 import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.board.BoardServiceImpl;
 import com.project.yjshop.service.image.ImageService;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,5 +35,10 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     public ProductResponse delProduct(@PathVariable Long boardId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return boardService.deleting(boardId, principalDetails);
+    }
+
+    @GetMapping("/")
+    public List<Board> allProduct() {
+        return boardService.findAll();
     }
 }
