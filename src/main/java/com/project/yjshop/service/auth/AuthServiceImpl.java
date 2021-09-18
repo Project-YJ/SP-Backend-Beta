@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
                             .userid(joinRequest.getUserid())
                             .password(passwordEncoder.encode(joinRequest.getPassword()))
                             .nickname(joinRequest.getNickname())
+                            .money(0L)
                             .role(UserRole.USER)
                             .build());
 

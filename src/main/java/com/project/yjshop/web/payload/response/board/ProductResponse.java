@@ -20,5 +20,6 @@ public class ProductResponse {
         private String title;
         private String titleImage;
         private Long price;
+        private Long count;
     }
 }
