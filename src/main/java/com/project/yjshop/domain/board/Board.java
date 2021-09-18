@@ -1,5 +1,6 @@
 package com.project.yjshop.domain.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.yjshop.domain.image.Image;
 import com.project.yjshop.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"user"})
 @Entity
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +29,23 @@ public class Board {
     private Long count;
     private Long price;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Image titleImage;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Image> images;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private User user;
+
+    private Long totalRevenue;
+
+    public Board removeCount(Long count) {
+        this.count -= count;
+        return Board.this;
+    }
+
+    public void revenue(Long revenue) {
+        totalRevenue += revenue;
+    }
 }
