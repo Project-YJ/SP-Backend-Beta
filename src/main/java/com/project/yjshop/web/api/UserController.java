@@ -2,12 +2,15 @@ package com.project.yjshop.web.api;
 
 import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.user.UserServiceImpl;
-import com.project.yjshop.web.payload.request.user.PurchaseRequest;
-import com.project.yjshop.web.payload.response.user.PurchaseResponse;
+import com.project.yjshop.web.payload.request.user.UserProductRequest;
+import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import com.project.yjshop.web.payload.response.user.UserPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +25,15 @@ public class UserController {
     }
 
     @PostMapping("/purchase")
-    public PurchaseResponse purchase(@RequestBody PurchaseRequest purchaseRequest,
-                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return userService.purchase(purchaseRequest, principalDetails);
+    public UserProductResponse purchase(@RequestBody @Valid UserProductRequest userProductRequest,
+                                        BindingResult bindingResult,
+                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.purchase(userProductRequest, bindingResult, principalDetails);
+    }
+
+    @PostMapping("/basket")
+    public UserProductResponse basket(@RequestBody UserProductRequest userProductRequest,
+                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.basket(userProductRequest, principalDetails);
     }
 }

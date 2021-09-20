@@ -8,14 +8,13 @@ import com.project.yjshop.error.exception.CustomException;
 import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.image.S3Service;
-import com.project.yjshop.web.payload.request.board.ProductRequest;
-import com.project.yjshop.web.payload.response.board.ProductResponse;
+import com.project.yjshop.web.payload.request.board.BoardProductRequest;
+import com.project.yjshop.web.payload.response.board.BoardProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,9 +32,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public ProductResponse posting(ProductRequest productRequest,
-                                   BindingResult bindingResult,
-                                   PrincipalDetails principalDetails) throws IOException {
+    public BoardProductResponse posting(BoardProductRequest boardProductRequest,
+                                        BindingResult bindingResult,
+                                        PrincipalDetails principalDetails) throws IOException {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -47,17 +46,17 @@ public class BoardServiceImpl implements BoardService{
         } else {
 
             Board saveBoard = boardRepository.save(Board.builder()
-                    .title(productRequest.getTitle())
-                    .titleImage(imageRepository.findByImagePath(imageService.imageUpload(s3Service.upload(productRequest.getTitleImage()))).get())
-                    .price(productRequest.getPrice())
-                    .count(productRequest.getCount())
+                    .title(boardProductRequest.getTitle())
+                    .titleImage(imageRepository.findByImagePath(imageService.imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
+                    .price(boardProductRequest.getPrice())
+                    .count(boardProductRequest.getCount())
                     .user(principalDetails.getUser())
                     .totalRevenue(0L)
                     .build());
 
-            return ProductResponse.builder()
+            return BoardProductResponse.builder()
                     .message("Post success")
-                    .product(ProductResponse.Product.builder()
+                    .product(BoardProductResponse.Product.builder()
                             .boardId(saveBoard.getId())
                             .title(saveBoard.getTitle())
                             .titleImage(saveBoard.getTitleImage().getImageFullPath())
@@ -70,7 +69,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public ProductResponse deleting(Long boardId, PrincipalDetails principalDetails) {
+    public BoardProductResponse deleting(Long boardId, PrincipalDetails principalDetails) {
 
         Board delBoard = boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
@@ -81,9 +80,9 @@ public class BoardServiceImpl implements BoardService{
         s3Service.delete(delBoard.getTitleImage().getImagePath());
         boardRepository.delete(delBoard);
 
-        return ProductResponse.builder()
+        return BoardProductResponse.builder()
                 .message("Delete success")
-                .product(ProductResponse.Product.builder()
+                .product(BoardProductResponse.Product.builder()
                         .boardId(delBoard.getId())
                         .title(delBoard.getTitle())
                         .titleImage(delBoard.getTitleImage().getImageFullPath())

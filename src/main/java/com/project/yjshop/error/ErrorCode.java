@@ -23,7 +23,8 @@ public enum ErrorCode {
     POSTING_FAILED(400, "상품 등록에 실패 했습니다."),
     BOARD_NOT_FOUND(404, "해당 상품을 찾지 못했습니다."),
 
-    LACK_MONEY(418, "잔액이 부족합니다");
+    LACK_MONEY(418, "잔액이 부족합니다."),
+    PURCHASE_FAILED(400, "상품 거래에 실패했습니다.");
 
     private final int status;
     private final String message;
