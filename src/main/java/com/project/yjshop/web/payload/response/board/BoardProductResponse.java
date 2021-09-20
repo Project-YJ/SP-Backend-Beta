@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-public class ProductResponse {
+public class BoardProductResponse {
 
     private String message;
 

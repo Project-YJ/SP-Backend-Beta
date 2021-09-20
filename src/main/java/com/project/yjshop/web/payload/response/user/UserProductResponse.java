@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class PurchaseResponse {
+public class UserProductResponse {
     private String message;
     private String product;
     private Long count;

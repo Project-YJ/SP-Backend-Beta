@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-public class ProductRequest {
+public class BoardProductRequest {
 
     @NotBlank(message = "제목을 입력해주세요")
     @Size(min = 4, max = 100, message = "상품제목은 4~100글자 사이여야합니다.")
