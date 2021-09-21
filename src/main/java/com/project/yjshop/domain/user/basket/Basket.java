@@ -1,5 +1,6 @@
 package com.project.yjshop.domain.user.basket;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.yjshop.domain.board.Board;
 import com.project.yjshop.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -13,11 +14,20 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"user"})
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name="bakset_uk",
+                        columnNames = {"product_id", "user_id"}
+                )
+        }
+)
 @Entity(name = "basket")
 public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private Long count;
 

@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"user"})
+@JsonIgnoreProperties({"user", "totalRevenue"})
 @Entity
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

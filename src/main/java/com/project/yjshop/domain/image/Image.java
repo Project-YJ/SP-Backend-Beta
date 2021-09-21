@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"board"})
+@JsonIgnoreProperties({"board", "id", "imagePath"})
 @Entity
 public class Image {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
