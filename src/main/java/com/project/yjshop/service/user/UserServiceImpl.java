@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -65,18 +66,38 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserProductResponse basket(UserProductRequest userProductRequest, PrincipalDetails principalDetails) {
-        Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow( ()-> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        basketRepository.save(Basket.builder()
-                .count(userProductRequest.getCount())
-                .product(board)
-                .user(userRepository.findById(principalDetails.getUser().getId()).get())
-                .build());
-        return UserProductResponse.builder()
-                .message("장바구니에 등록되었습니다.")
-                .product(board.getTitle())
-                .count(board.getCount())
-                .price(board.getPrice())
-                .build();
+    public UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            throw new CustomException(ErrorCode.INPUT_BASKET_FAILED, errorMap);
+        } else {
+            Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+            try {
+                basketRepository.save(Basket.builder()
+                        .count(userProductRequest.getCount())
+                        .product(board)
+                        .user(userRepository.findById(principalDetails.getUser().getId()).get())
+                        .build());
+            } catch (Exception e) {
+                throw new CustomException(ErrorCode.BASKET_ALREADY_EXISTS);
+            }
+
+            return UserProductResponse.builder()
+                    .message("장바구니에 등록되었습니다.")
+                    .product(board.getTitle())
+                    .count(board.getCount())
+                    .price(board.getPrice())
+                    .build();
+        }
+    }
+
+    @Override
+    public List<Basket> myBasket(PrincipalDetails principalDetails) {
+        return basketRepository.findAllByUser(principalDetails.getUser());
     }
 }
