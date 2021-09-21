@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +65,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails) {
 
         if (bindingResult.hasErrors()) {
@@ -76,7 +76,8 @@ public class UserServiceImpl implements UserService{
             }
             throw new CustomException(ErrorCode.INPUT_BASKET_FAILED, errorMap);
         } else {
-            Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+            Board board = boardRepository.findById(userProductRequest.getBoardPk())
+                    .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
             try {
                 basketRepository.save(Basket.builder()
                         .count(userProductRequest.getCount())
@@ -97,6 +98,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
+    public UserProductResponse delBasket(Long boardId, PrincipalDetails principalDetails) {
+        Basket del = basketRepository.mBasket(boardId, principalDetails.getUser().getId())
+                .orElseThrow(()->new CustomException(ErrorCode.BASKET_NOT_FOUND));
+        basketRepository.delete(del);
+        return UserProductResponse.builder()
+                .message("장바구니 삭제 성공")
+                .product(del.getProduct().getTitle())
+                .count(del.getCount())
+                .price(del.getProduct().getPrice())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Basket> myBasket(PrincipalDetails principalDetails) {
         return basketRepository.findAllByUser(principalDetails.getUser());
     }

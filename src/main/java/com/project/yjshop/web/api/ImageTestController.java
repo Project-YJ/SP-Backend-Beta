@@ -1,7 +1,5 @@
 package com.project.yjshop.web.api;
 
-import com.project.yjshop.domain.image.ImageRepository;
-import com.project.yjshop.service.image.ImageService;
 import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.image.S3Service;
 import lombok.RequiredArgsConstructor;

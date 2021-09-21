@@ -8,10 +8,8 @@ import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import com.project.yjshop.web.payload.response.user.UserPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -44,5 +42,11 @@ public class UserController {
                                       BindingResult bindingResult,
                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return userService.basket(userProductRequest, bindingResult, principalDetails);
+    }
+
+    @DeleteMapping("/basket/{boardId}")
+    public UserProductResponse delBasket(@PathVariable Long boardId,
+                                         @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.delBasket(boardId, principalDetails);
     }
 }

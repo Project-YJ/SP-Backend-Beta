@@ -12,5 +12,7 @@ import java.util.List;
 public interface UserService {
     UserProductResponse purchase(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails);
     UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails);
+    UserProductResponse delBasket(Long boardId, PrincipalDetails principalDetails);
     List<Basket> myBasket(PrincipalDetails principalDetails);
+
 }

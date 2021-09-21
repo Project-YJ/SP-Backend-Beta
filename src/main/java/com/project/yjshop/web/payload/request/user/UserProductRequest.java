@@ -1,7 +1,6 @@
 package com.project.yjshop.web.payload.request.user;
 
 import lombok.Data;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 

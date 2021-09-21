@@ -13,7 +13,6 @@ import com.project.yjshop.web.payload.request.auth.LoginRequest;
 import com.project.yjshop.web.payload.response.auth.CustomResponse;
 import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +30,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider tokenProvider;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    @Value("${jwt.refresh}")
-    private Long ref_time;
 
     @Override
     @Transactional

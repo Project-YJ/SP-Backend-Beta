@@ -1,9 +1,7 @@
 package com.project.yjshop.error.exception;
 
 import com.project.yjshop.error.ErrorCode;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;

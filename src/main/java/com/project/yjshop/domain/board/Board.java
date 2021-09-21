@@ -3,14 +3,13 @@ package com.project.yjshop.domain.board;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.yjshop.domain.image.Image;
 import com.project.yjshop.domain.user.User;
+import com.project.yjshop.error.ErrorCode;
+import com.project.yjshop.error.exception.CustomException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -24,9 +23,11 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
+    @Column(length = 100, nullable = false)
     private String title;
 
     private Long count;
+
     private Long price;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -41,8 +42,12 @@ public class Board {
     private Long totalRevenue;
 
     public Board removeCount(Long count) {
-        this.count -= count;
-        return Board.this;
+        if(this.count >= count) {
+            this.count -= count;
+            return Board.this;
+        } else {
+            throw new CustomException(ErrorCode.COUNT_IS_BIG);
+        }
     }
 
     public void revenue(Long revenue) {

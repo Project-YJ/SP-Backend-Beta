@@ -2,7 +2,6 @@ package com.project.yjshop.security.jwt;
 
 import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
-import com.project.yjshop.domain.user.UserRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
 import com.project.yjshop.security.auth.PrincipalDetailsService;
@@ -15,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 

@@ -2,7 +2,6 @@ package com.project.yjshop.web.payload.request.board;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
