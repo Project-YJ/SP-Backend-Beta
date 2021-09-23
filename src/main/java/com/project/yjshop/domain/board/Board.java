@@ -1,6 +1,7 @@
 package com.project.yjshop.domain.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.project.yjshop.domain.board.category.Category;
 import com.project.yjshop.domain.image.Image;
 import com.project.yjshop.domain.user.User;
 import com.project.yjshop.error.ErrorCode;
@@ -40,6 +41,9 @@ public class Board {
     private User user;
 
     private Long totalRevenue;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Category category;
 
     public Board removeCount(Long count) {
         if(this.count >= count) {

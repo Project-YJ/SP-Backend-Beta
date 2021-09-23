@@ -1,5 +1,7 @@
 package com.project.yjshop.web.api;
 
+import com.project.yjshop.domain.board.category.Category;
+import com.project.yjshop.domain.board.category.CategoryRepository;
 import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.domain.user.UserRepository;
@@ -10,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class Test {
 
     private final RefreshTokenRepository tokenRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("abc")
     public String abc() {
@@ -45,5 +49,12 @@ public class Test {
     @GetMapping("role")
     public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails.getUser().getRole().getKey();
+    }
+
+    @PostMapping("category")
+    public void cate(@RequestBody String name) {
+        categoryRepository.save(Category.builder()
+                .name(name)
+                .build());
     }
 }

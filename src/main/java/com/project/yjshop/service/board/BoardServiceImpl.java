@@ -2,6 +2,7 @@ package com.project.yjshop.service.board;
 
 import com.project.yjshop.domain.board.Board;
 import com.project.yjshop.domain.board.BoardRepository;
+import com.project.yjshop.domain.board.category.CategoryRepository;
 import com.project.yjshop.domain.image.ImageRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
@@ -26,6 +27,7 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final ImageRepository imageRepository;
+    private final CategoryRepository categoryRepository;
     private final ImageServiceImpl imageService;
     private final S3Service s3Service;
 
@@ -46,11 +48,14 @@ public class BoardServiceImpl implements BoardService{
 
             Board saveBoard = boardRepository.save(Board.builder()
                     .title(boardProductRequest.getTitle())
-                    .titleImage(imageRepository.findByImagePath(imageService.imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
+                    .titleImage(imageRepository.findByImagePath(imageService
+                            .imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
                     .price(boardProductRequest.getPrice())
                     .count(boardProductRequest.getCount())
                     .user(principalDetails.getUser())
                     .totalRevenue(0L)
+                    .category(categoryRepository.findByName(boardProductRequest.getCategory())
+                            .orElseThrow(()-> new CustomException(ErrorCode.CATEGORY_NOT_FOUND)))
                     .build());
 
             return BoardProductResponse.builder()

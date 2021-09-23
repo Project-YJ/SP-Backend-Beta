@@ -24,4 +24,7 @@ public class BoardProductRequest {
     @NotNull(message = "가격을 입력해주세요")
     @Min(value = 1000, message = "상품의 최소가격은 1000원입니다.")
     private Long price;
+
+    @NotBlank(message = "카테고리를 입력해주세요")
+    private String category;
 }

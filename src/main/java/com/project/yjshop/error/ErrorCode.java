@@ -18,6 +18,7 @@ public enum ErrorCode {
     LOGIN_FAILED(400, "auth : LOGIN 실패"),
     JOIN_FAILED(400, "auth : SIGN 실패"),
     USER_NOT_MATCH(401, "유저가 일치하지 않음"),
+    CATEGORY_NOT_FOUND(404, "해당카테고리는 존재하지 않습니다."),
     POSTING_FAILED(400, "상품 등록에 실패 했습니다."),
     BOARD_NOT_FOUND(404, "해당 상품을 찾지 못했습니다."),
     BASKET_NOT_FOUND(404, "해당 상품을 장바구니에서 찾지 못했습니다."),
