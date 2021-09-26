@@ -18,7 +18,6 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthServiceImpl authService;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/join")
     public CustomResponse<?> joinUser(@RequestBody @Valid JoinRequest joinRequest,

@@ -43,6 +43,7 @@ public class BoardServiceImpl implements BoardService{
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
+
             throw new CustomException(ErrorCode.POSTING_FAILED, errorMap);
         } else {
 
