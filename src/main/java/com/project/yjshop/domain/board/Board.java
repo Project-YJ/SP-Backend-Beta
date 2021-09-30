@@ -15,8 +15,8 @@ import java.util.List;
 
 @Builder
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties({"user", "totalRevenue"})
 @Entity
 public class Board {

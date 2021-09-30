@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor
 public class PrincipalDetails implements UserDetails {
 

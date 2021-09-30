@@ -9,8 +9,8 @@ import javax.persistence.*;
 
 @Builder
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Category {
     @Id

@@ -1,10 +1,14 @@
 package com.project.yjshop.web.payload.request.user;
 
-import lombok.Data;
+import lombok.*;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProductRequest {
 
     @NotNull

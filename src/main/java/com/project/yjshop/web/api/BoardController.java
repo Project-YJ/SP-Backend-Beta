@@ -2,7 +2,7 @@ package com.project.yjshop.web.api;
 
 import com.project.yjshop.domain.board.Board;
 import com.project.yjshop.security.auth.PrincipalDetails;
-import com.project.yjshop.service.board.BoardServiceImpl;
+import com.project.yjshop.service.board.BoardService;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("board")
 public class BoardController {
 
-    private final BoardServiceImpl boardService;
+    private final BoardService boardService;
 
     @PostMapping("/")
     public BoardProductResponse postProduct(@ModelAttribute @Valid BoardProductRequest product,

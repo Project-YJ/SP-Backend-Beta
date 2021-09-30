@@ -17,8 +17,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.UUID;
 
-@Service
 @NoArgsConstructor
+@Service
 public class S3Service {
     private AmazonS3 s3Client;
 

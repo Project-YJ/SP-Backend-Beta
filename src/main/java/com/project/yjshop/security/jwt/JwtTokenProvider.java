@@ -17,8 +17,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class JwtTokenProvider {
 
     private final RefreshTokenRepository refreshTokenRepository;

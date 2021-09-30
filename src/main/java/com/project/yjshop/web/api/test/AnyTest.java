@@ -1,4 +1,4 @@
-package com.project.yjshop.web.api;
+package com.project.yjshop.web.api.test;
 
 import com.project.yjshop.domain.board.category.Category;
 import com.project.yjshop.domain.board.category.CategoryRepository;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class Test {
+public class AnyTest {
 
     private final RefreshTokenRepository tokenRepository;
     private final UserRepository userRepository;

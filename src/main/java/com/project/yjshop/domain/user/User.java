@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
-@Getter
 @Builder
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "user")
 public class User {
 

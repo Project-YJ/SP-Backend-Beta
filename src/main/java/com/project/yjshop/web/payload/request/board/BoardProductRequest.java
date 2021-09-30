@@ -1,13 +1,16 @@
 package com.project.yjshop.web.payload.request.board;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardProductRequest {
 
     @NotBlank(message = "제목을 입력해주세요")

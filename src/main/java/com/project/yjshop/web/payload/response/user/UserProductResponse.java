@@ -1,10 +1,11 @@
 package com.project.yjshop.web.payload.response.user;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProductResponse {
     private String message;
     private String product;

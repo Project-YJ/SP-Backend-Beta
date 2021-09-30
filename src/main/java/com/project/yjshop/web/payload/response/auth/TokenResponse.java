@@ -1,10 +1,11 @@
 package com.project.yjshop.web.payload.response.auth;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenResponse {
     private String accessToken;
     private String refreshToken;

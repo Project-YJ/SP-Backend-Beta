@@ -1,4 +1,4 @@
-package com.project.yjshop.web.api;
+package com.project.yjshop.web.api.test;
 
 import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.image.S3Service;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-public class ImageTestController {
+public class ImageTest {
     private final S3Service s3Service;
     private final ImageServiceImpl imageService;
 
@@ -21,7 +21,7 @@ public class ImageTestController {
     }
 
     @DeleteMapping("delete")
-    public String imageDelete(@RequestParam(name = "imagePath") String imagePath) throws IOException {
+    public String imageDelete(@RequestParam(name = "imagePath") String imagePath){
         return s3Service.delete(imagePath);
     }
 }

@@ -2,7 +2,7 @@ package com.project.yjshop.web.api;
 
 import com.project.yjshop.domain.user.basket.Basket;
 import com.project.yjshop.security.auth.PrincipalDetails;
-import com.project.yjshop.service.user.UserServiceImpl;
+import com.project.yjshop.service.user.UserService;
 import com.project.yjshop.web.payload.request.user.UserProductRequest;
 import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import com.project.yjshop.web.payload.response.user.UserPageResponse;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("user")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/page")
     public UserPageResponse userPage() {

@@ -1,13 +1,16 @@
 package com.project.yjshop.web.payload.request.auth;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JoinRequest {
 
     @NotBlank(message = "이메일을 입력해주세요")

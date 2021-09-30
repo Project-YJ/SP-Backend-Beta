@@ -1,7 +1,6 @@
 package com.project.yjshop.web.payload.response.board;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
 @Data
@@ -12,7 +11,8 @@ public class BoardProductResponse {
     private final Product product;
 
     @Builder
-    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Product {
         private Long boardId;
         private String title;
