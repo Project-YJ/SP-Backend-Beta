@@ -26,9 +26,9 @@ import javax.persistence.*;
 public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long count;
+    private Integer count;
 
     @JoinColumn(name = "product_id")
     @ManyToOne

@@ -11,13 +11,14 @@ public class BoardProductResponse {
     private final Product product;
 
     @Builder
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Product {
-        private Long boardId;
+        private Integer boardId;
         private String title;
         private String titleImage;
-        private Long price;
-        private Long count;
+        private Integer price;
+        private Integer count;
     }
 }

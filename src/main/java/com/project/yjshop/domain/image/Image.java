@@ -12,12 +12,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"board", "id", "imagePath"})
 @Entity(name = "image")
 public class Image {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
-    private Long id;
+    private Integer id;
 
     private String imagePath;
 

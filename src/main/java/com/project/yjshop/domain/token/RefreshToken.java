@@ -24,7 +24,7 @@ public class RefreshToken {
     private String username;
 
     @TimeToLive
-    private Long delTime;
+    private Integer delTime;
 
-    public void resetTime(Long delTime) { this.delTime = delTime; }
+    public void resetTime(Integer delTime) { this.delTime = delTime; }
 }

@@ -15,7 +15,7 @@ public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String email;
@@ -29,16 +29,16 @@ public class User {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    private Long money;
+    private Integer money;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
 
-    public void plusMoney(Long money) {
+    public void plusMoney(Integer money) {
         this.money += money;
     }
-    public Long removeMoney(Long money) {
+    public Integer removeMoney(Integer money) {
         return this.money -= money;
     }
 }

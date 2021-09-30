@@ -17,21 +17,20 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"user", "totalRevenue"})
 @Entity(name = "board")
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
-    private Long id;
+    private Integer id;
 
     @Column(length = 100, nullable = false)
     private String title;
 
-    private Long count;
+    private Integer count;
 
-    private Long price;
+    private Integer price;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Image titleImage;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
@@ -40,12 +39,12 @@ public class Board {
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private Long totalRevenue;
+    private Integer totalRevenue;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    public Board removeCount(Long count) {
+    public Board removeCount(Integer count) {
         if(this.count >= count) {
             this.count -= count;
             return Board.this;
@@ -54,7 +53,7 @@ public class Board {
         }
     }
 
-    public void revenue(Long revenue) {
+    public void revenue(Integer revenue) {
         totalRevenue += revenue;
     }
 }

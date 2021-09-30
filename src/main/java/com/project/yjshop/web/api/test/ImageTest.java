@@ -1,7 +1,7 @@
 package com.project.yjshop.web.api.test;
 
 import com.project.yjshop.service.image.ImageServiceImpl;
-import com.project.yjshop.service.image.S3Service;
+import com.project.yjshop.service.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

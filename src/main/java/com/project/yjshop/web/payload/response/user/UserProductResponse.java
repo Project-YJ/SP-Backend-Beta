@@ -9,6 +9,6 @@ import lombok.*;
 public class UserProductResponse {
     private String message;
     private String product;
-    private Long count;
-    private Long price;
+    private Integer count;
+    private Integer price;
 }

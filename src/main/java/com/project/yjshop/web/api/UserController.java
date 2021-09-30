@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @DeleteMapping("/basket/{boardId}")
-    public UserProductResponse delBasket(@PathVariable Long boardId,
+    public UserProductResponse delBasket(@PathVariable Integer boardId,
                                          @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return userService.delBasket(boardId, principalDetails);
     }

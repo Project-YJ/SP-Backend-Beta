@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
             Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
             User user = userRepository.findById(principalDetails.getUser().getId()).get();
 
-            Long price = board.getPrice() * userProductRequest.getCount();
+            Integer price = board.getPrice() * userProductRequest.getCount();
 
             if (principalDetails.getUser().getMoney() < price) {
                 throw new CustomException(ErrorCode.LACK_MONEY);
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserProductResponse delBasket(Long boardId, PrincipalDetails principalDetails) {
+    public UserProductResponse delBasket(Integer boardId, PrincipalDetails principalDetails) {
         Basket del = basketRepository.mBasket(boardId, principalDetails.getUser().getId())
                 .orElseThrow(()->new CustomException(ErrorCode.BASKET_NOT_FOUND));
         basketRepository.delete(del);

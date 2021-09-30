@@ -42,7 +42,7 @@ public class AnyTest {
     @GetMapping("money")
     @Transactional
     public String money() {
-        userRepository.findById(1L).get().plusMoney(100000L);
+        userRepository.findById(1).get().plusMoney(100000);
         return null;
     }
 

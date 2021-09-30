@@ -1,4 +1,4 @@
-package com.project.yjshop.service.image;
+package com.project.yjshop.service.s3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.project.yjshop.service.s3.S3Service;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @Service
-public class S3Service {
+public class S3ServiceImpl implements S3Service {
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.credentials.accessKey}")

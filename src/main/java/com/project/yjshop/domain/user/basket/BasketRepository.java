@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface BasketRepository extends JpaRepository<Basket, Long> {
+public interface BasketRepository extends JpaRepository<Basket, Integer> {
     List<Basket> findAllByUser(User user);
 
     @Query(value = "SELECT * FROM basket WHERE product_id = :product_id AND user_id = :user_id", nativeQuery = true)
-    Optional<Basket> mBasket(Long product_id, Long user_id);
+    Optional<Basket> mBasket(Integer product_id, Integer user_id);
 }

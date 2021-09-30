@@ -5,16 +5,16 @@ import lombok.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-@Builder
+@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProductRequest {
 
     @NotNull
-    public Long boardPk;
+    public Integer boardPk;
 
     @NotNull
     @Min(value = 1, message = "최소개수는 1개입니다")
-    public Long count;
+    public Integer count;
 }

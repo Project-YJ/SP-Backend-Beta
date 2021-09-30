@@ -5,6 +5,7 @@ import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.board.BoardService;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
+import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -20,20 +21,25 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping("/")
+    @PostMapping("/product/")
     public BoardProductResponse postProduct(@ModelAttribute @Valid BoardProductRequest product,
                                             BindingResult bindingResult,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
         return boardService.posting(product, bindingResult, principalDetails);
     }
 
-    @DeleteMapping("/{boardId}")
-    public BoardProductResponse delProduct(@PathVariable Long boardId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @DeleteMapping("/product/{boardId}")
+    public BoardProductResponse delProduct(@PathVariable Integer boardId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return boardService.deleting(boardId, principalDetails);
     }
 
-    @GetMapping("/")
+    @GetMapping("/product/")
     public List<Board> allProduct() {
         return boardService.findAll();
+    }
+
+    @GetMapping("/category/")
+    public CategoryResponse sortedCategoryList() {
+        return boardService.sortedCategoryList();
     }
 }

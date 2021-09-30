@@ -34,10 +34,10 @@ public class JwtTokenProvider {
     private String header;
 
     @Value("${jwt.access}")
-    private Long acc_time;
+    private Integer acc_time;
 
     @Value("${jwt.refresh}")
-    private Long ref_time;
+    private Integer ref_time;
 
     public boolean isRefresh(String token) {
         try {

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Builder
+@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,14 +19,14 @@ public class BoardProductRequest {
 
     @NotNull(message = "제품 수량을 입력해주세요")
     @Min(value = 1, message = "상품은 최소 1개여야합니다.")
-    private Long count;
+    private Integer count;
 
     @NotNull(message = "상품 이미지를 선택해주세요")
     private MultipartFile titleImage;
 
     @NotNull(message = "가격을 입력해주세요")
     @Min(value = 1000, message = "상품의 최소가격은 1000원입니다.")
-    private Long price;
+    private Integer price;
 
     @NotBlank(message = "카테고리를 입력해주세요")
     private String category;

@@ -17,9 +17,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JoinColumn(name = "category_name")
     @Column(unique = true)
     private String name;
 
+    @JoinColumn(name = "category_count")
     private Integer count;
 
     public Category upCount() {
