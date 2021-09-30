@@ -9,9 +9,10 @@ import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
 import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.image.ImageServiceImpl;
-import com.project.yjshop.service.image.S3Service;
+import com.project.yjshop.service.s3.S3Service;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
+import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -56,13 +58,15 @@ public class BoardServiceImpl implements BoardService{
                     .price(boardProductRequest.getPrice())
                     .count(boardProductRequest.getCount())
                     .user(principalDetails.getUser())
-                    .totalRevenue(0L)
-                    .category(categoryRepository.existsByName(categoryName) ? categoryRepository.save(
+                    .totalRevenue(0)
+                    .category(categoryRepository.existsByName(categoryName)
+                            ? categoryRepository.findByName(categoryName).map(Category::upCount).get()
+                            : categoryRepository.save(
                             Category.builder()
                                     .name(categoryName)
-                                    .count(0)
-                                    .build()) : categoryRepository.findByName(categoryName)
-                            .map(Category::upCount).get())
+                                    .count(1)
+                                    .build()
+                    ))
                     .build());
 
             return BoardProductResponse.builder()
@@ -80,7 +84,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public BoardProductResponse deleting(Long boardId, PrincipalDetails principalDetails) {
+    public BoardProductResponse deleting(Integer boardId, PrincipalDetails principalDetails) {
 
         Board delBoard = boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
@@ -107,5 +111,20 @@ public class BoardServiceImpl implements BoardService{
     @Transactional(readOnly = true)
     public List<Board> findAll() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public CategoryResponse sortedCategoryList() {
+        List<CategoryResponse.listCategory> categoryList = categoryRepository.findAllDesc()
+                .stream()
+                .map(category -> CategoryResponse.listCategory
+                        .builder()
+                        .name(category.getName())
+                        .count(category.getCount())
+                        .build())
+                .collect(Collectors.toList());
+        return CategoryResponse.builder()
+                .categories(categoryList)
+                .build();
     }
 }
