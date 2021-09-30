@@ -2,6 +2,7 @@ package com.project.yjshop.service.board;
 
 import com.project.yjshop.domain.board.Board;
 import com.project.yjshop.domain.board.BoardRepository;
+import com.project.yjshop.domain.board.category.Category;
 import com.project.yjshop.domain.board.category.CategoryRepository;
 import com.project.yjshop.domain.image.ImageRepository;
 import com.project.yjshop.error.ErrorCode;
@@ -46,6 +47,7 @@ public class BoardServiceImpl implements BoardService{
 
             throw new CustomException(ErrorCode.POSTING_FAILED, errorMap);
         } else {
+            String categoryName = boardProductRequest.getCategory();
 
             Board saveBoard = boardRepository.save(Board.builder()
                     .title(boardProductRequest.getTitle())
@@ -55,8 +57,12 @@ public class BoardServiceImpl implements BoardService{
                     .count(boardProductRequest.getCount())
                     .user(principalDetails.getUser())
                     .totalRevenue(0L)
-                    .category(categoryRepository.findByName(boardProductRequest.getCategory())
-                            .orElseThrow(()-> new CustomException(ErrorCode.CATEGORY_NOT_FOUND)))
+                    .category(categoryRepository.existsByName(categoryName) ? categoryRepository.save(
+                            Category.builder()
+                                    .name(categoryName)
+                                    .count(0)
+                                    .build()) : categoryRepository.findByName(categoryName)
+                            .map(Category::upCount).get())
                     .build());
 
             return BoardProductResponse.builder()
