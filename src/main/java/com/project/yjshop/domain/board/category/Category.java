@@ -11,12 +11,19 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(unique = true)
     private String name;
+
+    private Integer count;
+
+    public Category upCount() {
+        this.count++;
+        return this;
+    }
 }

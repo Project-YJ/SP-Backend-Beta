@@ -16,7 +16,7 @@ public class RefreshToken {
 
     @Id
     @Column(name = "refresh_id")
-    private Long id;
+    private Integer id;
 
     @Indexed
     private String token;
