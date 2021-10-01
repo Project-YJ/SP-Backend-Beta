@@ -12,6 +12,7 @@ import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.s3.S3Service;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
+import com.project.yjshop.web.payload.response.board.CategoryListResopnse;
 import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -115,16 +116,35 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public CategoryResponse sortedCategoryList() {
-        List<CategoryResponse.listCategory> categoryList = categoryRepository.findAllDesc()
-                .stream()
-                .map(category -> CategoryResponse.listCategory
-                        .builder()
-                        .name(category.getName())
-                        .count(category.getCount())
-                        .build())
-                .collect(Collectors.toList());
         return CategoryResponse.builder()
-                .categories(categoryList)
+                .categories(
+                        categoryRepository.findAllDesc()
+                        .stream()
+                        .map(category -> CategoryResponse.listCategory
+                                .builder()
+                                .name(category.getName())
+                                .count(category.getCount())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
+    }
+
+    @Override
+    public CategoryListResopnse categoryList(Integer categoryId) {
+        return CategoryListResopnse
+                .builder()
+                .productList(
+                        boardRepository.findAllByCategoryId(categoryId)
+                        .stream()
+                        .map(board -> CategoryListResopnse.product
+                                .builder()
+                                .title(board.getTitle())
+                                .titleImage(board.getTitleImage().getImageFullPath())
+                                .count(board.getCount())
+                                .price(board.getPrice())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+
     }
 }
