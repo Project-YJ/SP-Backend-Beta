@@ -41,6 +41,7 @@ public class Board {
 
     private Integer totalRevenue;
 
+    @JoinColumn(name = "category_Id")
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
 
