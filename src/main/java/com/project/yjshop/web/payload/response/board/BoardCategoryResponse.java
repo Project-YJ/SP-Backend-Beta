@@ -6,9 +6,9 @@ import java.util.List;
 
 @Builder
 @Data
-public class CategoryListResopnse {
+public class BoardCategoryResponse {
 
-    private List<CategoryListResopnse.product> productList;
+    private List<BoardCategoryResponse.product> productList;
 
     @Builder
     @Getter

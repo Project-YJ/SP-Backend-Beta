@@ -12,7 +12,7 @@ import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.s3.S3Service;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
-import com.project.yjshop.web.payload.response.board.CategoryListResopnse;
+import com.project.yjshop.web.payload.response.board.BoardCategoryResponse;
 import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -130,21 +130,25 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public CategoryListResopnse categoryList(Integer categoryId) {
-        return CategoryListResopnse
-                .builder()
-                .productList(
-                        boardRepository.findAllByCategoryId(categoryId)
-                        .stream()
-                        .map(board -> CategoryListResopnse.product
-                                .builder()
-                                .title(board.getTitle())
-                                .titleImage(board.getTitleImage().getImageFullPath())
-                                .count(board.getCount())
-                                .price(board.getPrice())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+    public BoardCategoryResponse categoryList(Integer categoryId) {
 
+        try {
+            return BoardCategoryResponse
+                    .builder()
+                    .productList(
+                            boardRepository.findAllByCategoryId(categoryId)
+                                    .stream()
+                                    .map(board -> BoardCategoryResponse.product
+                                            .builder()
+                                            .title(board.getTitle())
+                                            .titleImage(board.getTitleImage().getImageFullPath())
+                                            .count(board.getCount())
+                                            .price(board.getPrice())
+                                            .build())
+                                    .collect(Collectors.toList()))
+                    .build();
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
     }
 }

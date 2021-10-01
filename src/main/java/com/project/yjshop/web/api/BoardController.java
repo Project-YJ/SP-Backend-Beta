@@ -3,9 +3,10 @@ package com.project.yjshop.web.api;
 import com.project.yjshop.domain.board.Board;
 import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.board.BoardService;
+import com.project.yjshop.web.payload.request.board.BoardCategoryRequest;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
-import com.project.yjshop.web.payload.response.board.CategoryListResopnse;
+import com.project.yjshop.web.payload.response.board.BoardCategoryResponse;
 import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,9 +40,9 @@ public class BoardController {
         return boardService.findAll();
     }
 
-    @GetMapping("/product/category")
-    public CategoryListResopnse categoryList(@RequestBody Integer categoryId) {
-        return boardService.categoryList(categoryId);
+    @GetMapping("/category/product")
+    public BoardCategoryResponse categoryList(@RequestBody BoardCategoryRequest boardCategoryRequest) {
+        return boardService.categoryList(boardCategoryRequest.getCategoryId());
     }
 
     @GetMapping("/category/")
