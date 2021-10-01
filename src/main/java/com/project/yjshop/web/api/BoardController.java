@@ -5,6 +5,7 @@ import com.project.yjshop.security.auth.PrincipalDetails;
 import com.project.yjshop.service.board.BoardService;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
+import com.project.yjshop.web.payload.response.board.CategoryListResopnse;
 import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +37,11 @@ public class BoardController {
     @GetMapping("/product/")
     public List<Board> allProduct() {
         return boardService.findAll();
+    }
+
+    @GetMapping("/product/category")
+    public CategoryListResopnse categoryList(@RequestBody Integer categoryId) {
+        return boardService.categoryList(categoryId);
     }
 
     @GetMapping("/category/")
