@@ -1,6 +1,5 @@
 package com.project.yjshop.domain.board;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.yjshop.domain.board.category.Category;
 import com.project.yjshop.domain.image.Image;
 import com.project.yjshop.domain.user.User;
