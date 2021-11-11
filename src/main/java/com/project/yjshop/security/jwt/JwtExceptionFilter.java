@@ -1,8 +1,12 @@
 package com.project.yjshop.security.jwt;
 
+import com.project.yjshop.error.CMRespDto;
 import com.project.yjshop.error.exception.CustomException;
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,13 +21,11 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (CustomException e) {
-            JSONObject write = new JSONObject();
-            write.put("message", e.getErrorCode().getMessage());
-            write.put("error", e.getErrorMap());
+            CMRespDto error = new CMRespDto(e.getErrorCode().getMessage());
 
             response.setContentType("application/json");
             response.setStatus(e.getErrorCode().getStatus());
-            response.getWriter().write(write.toJSONString());
+            response.getWriter().write(error.toString());
         }
     }
 }
