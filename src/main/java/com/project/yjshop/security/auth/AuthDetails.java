@@ -2,24 +2,23 @@ package com.project.yjshop.security.auth;
 
 import com.project.yjshop.domain.user.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
-@Getter
 @AllArgsConstructor
-public class PrincipalDetails implements UserDetails {
+public class AuthDetails implements UserDetails {
 
     private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) ()-> user.getRole().getKey());
-        return collection;
+        return Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().name())
+        );
     }
 
     @Override

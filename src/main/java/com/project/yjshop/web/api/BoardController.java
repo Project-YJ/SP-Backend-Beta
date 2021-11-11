@@ -1,7 +1,7 @@
 package com.project.yjshop.web.api;
 
 import com.project.yjshop.domain.board.Board;
-import com.project.yjshop.security.auth.PrincipalDetails;
+import com.project.yjshop.security.auth.AuthDetails;
 import com.project.yjshop.service.board.BoardService;
 import com.project.yjshop.web.payload.request.board.BoardCategoryRequest;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
@@ -26,13 +26,13 @@ public class BoardController {
     @PostMapping("/product/")
     public BoardProductResponse postProduct(@ModelAttribute @Valid BoardProductRequest product,
                                             BindingResult bindingResult,
-                                            @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
-        return boardService.posting(product, bindingResult, principalDetails);
+                                            @AuthenticationPrincipal AuthDetails authDetails) throws IOException {
+        return boardService.posting(product, bindingResult, authDetails);
     }
 
     @DeleteMapping("/product/{boardId}")
-    public BoardProductResponse delProduct(@PathVariable Integer boardId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return boardService.deleting(boardId, principalDetails);
+    public BoardProductResponse delProduct(@PathVariable Integer boardId, @AuthenticationPrincipal AuthDetails authDetails) {
+        return boardService.deleting(boardId, authDetails);
     }
 
     @GetMapping("/product/")

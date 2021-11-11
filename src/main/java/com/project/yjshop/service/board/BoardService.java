@@ -1,7 +1,7 @@
 package com.project.yjshop.service.board;
 
 import com.project.yjshop.domain.board.Board;
-import com.project.yjshop.security.auth.PrincipalDetails;
+import com.project.yjshop.security.auth.AuthDetails;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
 import com.project.yjshop.web.payload.response.board.BoardProductResponse;
 import com.project.yjshop.web.payload.response.board.BoardCategoryResponse;
@@ -14,8 +14,8 @@ import java.util.List;
 public interface BoardService {
     BoardProductResponse posting(BoardProductRequest boardProductRequest,
                                  BindingResult bindingResult,
-                                 PrincipalDetails principalDetails) throws IOException;
-    BoardProductResponse deleting(Integer boardId, PrincipalDetails principalDetails);
+                                 AuthDetails authDetails) throws IOException;
+    BoardProductResponse deleting(Integer boardId, AuthDetails authDetails);
     List<Board> findAll();
     CategoryResponse sortedCategoryList();
     BoardCategoryResponse categoryList(Integer categoryId);

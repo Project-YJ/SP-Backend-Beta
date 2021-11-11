@@ -8,7 +8,7 @@ import com.project.yjshop.domain.user.basket.Basket;
 import com.project.yjshop.domain.user.basket.BasketRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
-import com.project.yjshop.security.auth.PrincipalDetails;
+import com.project.yjshop.security.auth.AuthDetails;
 import com.project.yjshop.web.payload.request.user.UserProductRequest;
 import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserProductResponse purchase(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails) {
+    public UserProductResponse purchase(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -42,11 +42,11 @@ public class UserServiceImpl implements UserService{
         } else {
 
             Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-            User user = userRepository.findById(principalDetails.getUser().getId()).get();
+            User user = userRepository.findById(authDetails.getUser().getId()).get();
 
             Integer price = board.getPrice() * userProductRequest.getCount();
 
-            if (principalDetails.getUser().getMoney() < price) {
+            if (authDetails.getUser().getMoney() < price) {
                 throw new CustomException(ErrorCode.LACK_MONEY);
             }
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, PrincipalDetails principalDetails) {
+    public UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails) {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService{
                 basketRepository.save(Basket.builder()
                         .count(userProductRequest.getCount())
                         .product(board)
-                        .user(userRepository.findById(principalDetails.getUser().getId()).get())
+                        .user(userRepository.findById(authDetails.getUser().getId()).get())
                         .build());
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.BASKET_ALREADY_EXISTS);
@@ -99,8 +99,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserProductResponse delBasket(Integer boardId, PrincipalDetails principalDetails) {
-        Basket del = basketRepository.mBasket(boardId, principalDetails.getUser().getId())
+    public UserProductResponse delBasket(Integer boardId, AuthDetails authDetails) {
+        Basket del = basketRepository.mBasket(boardId, authDetails.getUser().getId())
                 .orElseThrow(()->new CustomException(ErrorCode.BASKET_NOT_FOUND));
         basketRepository.delete(del);
         return UserProductResponse.builder()
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Basket> myBasket(PrincipalDetails principalDetails) {
-        return basketRepository.findAllByUser(principalDetails.getUser());
+    public List<Basket> myBasket(AuthDetails authDetails) {
+        return basketRepository.findAllByUser(authDetails.getUser());
     }
 }

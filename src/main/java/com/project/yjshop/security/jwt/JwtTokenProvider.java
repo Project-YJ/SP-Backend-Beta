@@ -4,7 +4,7 @@ import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
-import com.project.yjshop.security.auth.PrincipalDetailsService;
+import com.project.yjshop.security.auth.AuthDetailsService;
 import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.*;
 public class JwtTokenProvider {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final PrincipalDetailsService principalDetailsService;
+    private final AuthDetailsService authDetailsService;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -82,7 +82,7 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
-        UserDetails userDetails = principalDetailsService.loadUserByUsername(claims.getSubject());
+        UserDetails userDetails = authDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

@@ -7,7 +7,7 @@ import com.project.yjshop.domain.board.category.CategoryRepository;
 import com.project.yjshop.domain.image.ImageRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
-import com.project.yjshop.security.auth.PrincipalDetails;
+import com.project.yjshop.security.auth.AuthDetails;
 import com.project.yjshop.service.image.ImageServiceImpl;
 import com.project.yjshop.service.s3.S3Service;
 import com.project.yjshop.web.payload.request.board.BoardProductRequest;
@@ -39,7 +39,7 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     public BoardProductResponse posting(BoardProductRequest boardProductRequest,
                                         BindingResult bindingResult,
-                                        PrincipalDetails principalDetails) throws IOException {
+                                        AuthDetails authDetails) throws IOException {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class BoardServiceImpl implements BoardService{
                             .imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
                     .price(boardProductRequest.getPrice())
                     .count(boardProductRequest.getCount())
-                    .user(principalDetails.getUser())
+                    .user(authDetails.getUser())
                     .totalRevenue(0)
                     .category(categoryRepository.existsByName(categoryName)
                             ? categoryRepository.findByName(categoryName).map(Category::upCount).get()
@@ -85,11 +85,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public BoardProductResponse deleting(Integer boardId, PrincipalDetails principalDetails) {
+    public BoardProductResponse deleting(Integer boardId, AuthDetails authDetails) {
 
         Board delBoard = boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
-        if(principalDetails.getUser().getId() != delBoard.getUser().getId()) {
+        if(authDetails.getUser().getId() != delBoard.getUser().getId()) {
             throw new CustomException(ErrorCode.USER_NOT_MATCH);
         }
 

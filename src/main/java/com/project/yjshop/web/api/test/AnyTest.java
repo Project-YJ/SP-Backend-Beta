@@ -5,8 +5,7 @@ import com.project.yjshop.domain.board.category.CategoryRepository;
 import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.domain.user.UserRepository;
-import com.project.yjshop.domain.user.UserRole;
-import com.project.yjshop.security.auth.PrincipalDetails;
+import com.project.yjshop.security.auth.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +46,8 @@ public class AnyTest {
     }
 
     @GetMapping("role")
-    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return principalDetails.getUser().getRole().getKey();
+    public String user(@AuthenticationPrincipal AuthDetails authDetails) {
+        return authDetails.getUser().getRole().getKey();
     }
 
     @PostMapping("category")
