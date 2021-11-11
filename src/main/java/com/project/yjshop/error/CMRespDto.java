@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CMRespDto<T> {
     private String message;
-    private T error;
 }

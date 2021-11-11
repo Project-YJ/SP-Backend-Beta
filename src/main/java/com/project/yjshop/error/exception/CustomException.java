@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Getter
 public class CustomException extends RuntimeException{
-    @Autowired
+
     private final ErrorCode errorCode;
     private Map<String, String> errorMap;
 
