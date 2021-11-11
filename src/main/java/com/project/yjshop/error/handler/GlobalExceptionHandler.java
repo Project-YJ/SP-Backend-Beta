@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> customValidationException(CustomException e) {
-        return new ResponseEntity<>(new CMRespDto<>(e.getErrorCode().getMessage()),
+        return new ResponseEntity<>(new CMRespDto(e.getErrorCode().getMessage()),
                 HttpStatus.valueOf(e.getErrorCode().getStatus()));
     }
 

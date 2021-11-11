@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CMRespDto<T> {
+public class CMRespDto {
     private String message;
 }
