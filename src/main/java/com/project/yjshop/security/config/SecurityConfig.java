@@ -22,7 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,24 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .formLogin().disable()
                 .logout().disable()
-
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/board/**").hasRole("USER")
                 .antMatchers("/test/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-
-                .and()
-                .addFilterBefore(
-                        new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class
-                )
-                .addFilterBefore(
-                        new JwtExceptionFilter(), JwtFilter.class
-                );
+                .and().apply(new FilterConfig(jwtTokenProvider));
     }
 
     @Bean
