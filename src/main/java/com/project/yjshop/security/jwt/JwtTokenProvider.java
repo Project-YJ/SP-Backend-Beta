@@ -8,7 +8,6 @@ import com.project.yjshop.security.auth.AuthDetailsService;
 import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,25 +22,11 @@ public class JwtTokenProvider {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthDetailsService authDetailsService;
-
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.prefix}")
-    private String prefix;
-
-    @Value("${jwt.header}")
-    private String header;
-
-    @Value("${jwt.access}")
-    private Integer acc_time;
-
-    @Value("${jwt.refresh}")
-    private Integer ref_time;
+    private final JwtProperties jwtProperties;
 
     public boolean isRefresh(String token) {
         try {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("type").equals("refresh");
+            return Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(token).getBody().get("type").equals("refresh");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.NOT_REFRESH);
         }
@@ -52,8 +37,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(Jwts.claims().setSubject(username))
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + acc_time))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(new Date(now.getTime() + jwtProperties.getAccessExp()))
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
 
@@ -63,15 +48,15 @@ public class JwtTokenProvider {
         String accessToken = createAccess(username);
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now.getTime() + ref_time))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(new Date(now.getTime() + jwtProperties.getRefreshExp()))
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .claim("type", "refresh")
                 .compact();
 
         refreshTokenRepository.save(RefreshToken.builder()
                 .token(refreshToken)
                 .username(username)
-                .delTime(ref_time/1000)
+                .delTime(jwtProperties.getRefreshExp()/1000)
                 .build());
 
         return TokenResponse.builder()
@@ -81,14 +66,14 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(accessToken).getBody();
         UserDetails userDetails = authDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public boolean validateToken(String jwt) {
         try {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody().getExpiration().after(new Date());
+            return Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(jwt).getBody().getExpiration().after(new Date());
         } catch (SecurityException | MalformedJwtException e) {
             throw new CustomException(ErrorCode.INVALID_TOKEN_SIGNATURE);
         } catch (ExpiredJwtException e) {
@@ -101,9 +86,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String token = request.getHeader(header);
-        if (StringUtils.hasText(token) && token.startsWith(prefix)) {
-            return token.substring(prefix.length());
+        String token = request.getHeader(jwtProperties.getHeader());
+        if (StringUtils.hasText(token) && token.startsWith(jwtProperties.getPrefix())) {
+            return token.substring(jwtProperties.getPrefix().length());
         }
        return null;
     }
