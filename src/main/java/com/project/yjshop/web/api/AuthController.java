@@ -6,7 +6,6 @@ import com.project.yjshop.web.payload.request.auth.LoginRequest;
 import com.project.yjshop.web.payload.response.auth.CustomResponse;
 import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,15 +18,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/join")
-    public CustomResponse<?> joinUser(@RequestBody @Valid JoinRequest joinRequest,
-                                   BindingResult binding) {
-        return authService.join(joinRequest, binding);
+    public CustomResponse<?> joinUser(@RequestBody @Valid JoinRequest joinRequest) {
+        return authService.join(joinRequest);
     }
 
     @PostMapping("/login")
-    public TokenResponse loginUser(@RequestBody @Valid LoginRequest loginRequest,
-                                   BindingResult binding) {
-        return authService.login(loginRequest, binding);
+    public TokenResponse loginUser(@RequestBody @Valid LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 
     @PostMapping("/reissue")

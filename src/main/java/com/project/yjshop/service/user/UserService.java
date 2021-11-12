@@ -9,8 +9,8 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 public interface UserService {
-    UserProductResponse purchase(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails);
-    UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails);
+    UserProductResponse purchase(UserProductRequest userProductRequest, AuthDetails authDetails);
+    UserProductResponse basket(UserProductRequest userProductRequest, AuthDetails authDetails);
     UserProductResponse delBasket(Integer boardId, AuthDetails authDetails);
     List<Basket> myBasket(AuthDetails authDetails);
 

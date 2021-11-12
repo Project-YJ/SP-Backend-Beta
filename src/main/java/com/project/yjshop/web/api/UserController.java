@@ -8,7 +8,6 @@ import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import com.project.yjshop.web.payload.response.user.UserPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -27,9 +26,8 @@ public class UserController {
 
     @PostMapping("/purchase")
     public UserProductResponse purchase(@RequestBody @Valid UserProductRequest userProductRequest,
-                                        BindingResult bindingResult,
                                         @AuthenticationPrincipal AuthDetails authDetails) {
-        return userService.purchase(userProductRequest, bindingResult, authDetails);
+        return userService.purchase(userProductRequest, authDetails);
     }
 
     @GetMapping("/basket")
@@ -39,9 +37,8 @@ public class UserController {
 
     @PostMapping("/basket")
     public UserProductResponse basket(@RequestBody @Valid UserProductRequest userProductRequest,
-                                      BindingResult bindingResult,
                                       @AuthenticationPrincipal AuthDetails authDetails) {
-        return userService.basket(userProductRequest, bindingResult, authDetails);
+        return userService.basket(userProductRequest, authDetails);
     }
 
     @DeleteMapping("/basket/{boardId}")

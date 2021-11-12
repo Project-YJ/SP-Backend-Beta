@@ -14,11 +14,7 @@ import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -30,16 +26,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserProductResponse purchase(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            throw new CustomException(ErrorCode.PURCHASE_FAILED, errorMap);
-        } else {
+    public UserProductResponse purchase(UserProductRequest userProductRequest, AuthDetails authDetails) {
 
             Board board = boardRepository.findById(userProductRequest.getBoardPk()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
             User user = userRepository.findById(authDetails.getUser().getId()).get();
@@ -61,21 +48,12 @@ public class UserServiceImpl implements UserService{
                     .count(userProductRequest.getCount())
                     .price(board.getPrice())
                     .build();
-        }
     }
 
     @Override
     @Transactional
-    public UserProductResponse basket(UserProductRequest userProductRequest, BindingResult bindingResult, AuthDetails authDetails) {
+    public UserProductResponse basket(UserProductRequest userProductRequest, AuthDetails authDetails) {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            throw new CustomException(ErrorCode.INPUT_BASKET_FAILED, errorMap);
-        } else {
             Board board = boardRepository.findById(userProductRequest.getBoardPk())
                     .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
             try {
@@ -94,7 +72,6 @@ public class UserServiceImpl implements UserService{
                     .count(board.getCount())
                     .price(board.getPrice())
                     .build();
-        }
     }
 
     @Override

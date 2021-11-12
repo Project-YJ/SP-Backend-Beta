@@ -17,12 +17,8 @@ import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -38,18 +34,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public BoardProductResponse posting(BoardProductRequest boardProductRequest,
-                                        BindingResult bindingResult,
                                         AuthDetails authDetails) throws IOException {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-
-            throw new CustomException(ErrorCode.POSTING_FAILED, errorMap);
-        } else {
             String categoryName = boardProductRequest.getCategory();
 
             Board saveBoard = boardRepository.save(Board.builder()
@@ -80,7 +66,6 @@ public class BoardServiceImpl implements BoardService{
                             .count(saveBoard.getCount())
                             .build())
                     .build();
-        }
     }
 
     @Override

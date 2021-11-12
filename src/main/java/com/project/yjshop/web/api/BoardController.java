@@ -10,7 +10,6 @@ import com.project.yjshop.web.payload.response.board.BoardCategoryResponse;
 import com.project.yjshop.web.payload.response.board.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -25,9 +24,8 @@ public class BoardController {
 
     @PostMapping("/product/")
     public BoardProductResponse postProduct(@ModelAttribute @Valid BoardProductRequest product,
-                                            BindingResult bindingResult,
                                             @AuthenticationPrincipal AuthDetails authDetails) throws IOException {
-        return boardService.posting(product, bindingResult, authDetails);
+        return boardService.posting(product, authDetails);
     }
 
     @DeleteMapping("/product/{boardId}")

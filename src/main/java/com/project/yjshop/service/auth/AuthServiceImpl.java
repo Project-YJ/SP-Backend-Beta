@@ -1,6 +1,5 @@
 package com.project.yjshop.service.auth;
 
-import com.project.yjshop.domain.token.RefreshToken;
 import com.project.yjshop.domain.token.RefreshTokenRepository;
 import com.project.yjshop.domain.user.User;
 import com.project.yjshop.domain.user.UserRepository;
@@ -16,11 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,16 +27,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public CustomResponse<?> join(JoinRequest joinRequest, BindingResult binding) {
+    public CustomResponse<?> join(JoinRequest joinRequest) {
 
-        if (binding.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : binding.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            throw new CustomException(ErrorCode.JOIN_FAILED, errorMap);
-        } else {
             if (userRepository.existsByUseridOrNickname(joinRequest.getUserid(), joinRequest.getNickname())) {
                 throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
             }
@@ -61,27 +47,18 @@ public class AuthServiceImpl implements AuthService {
                     .key(userRepository.findByUserid(joinRequest.getUserid()).get().getId())
                     .message("회원가입 성공")
                     .build();
-        }
     }
 
     @Override
     @Transactional
-    public TokenResponse login(LoginRequest loginRequest, BindingResult binding) {
-        if (binding.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
+    public TokenResponse login(LoginRequest loginRequest) {
 
-            for (FieldError error : binding.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            throw new CustomException(ErrorCode.LOGIN_FAILED, errorMap);
-        } else {
             User userEntity = userRepository.findByUserid(loginRequest.getUserid())
                     .orElseThrow(() -> new CustomException(ErrorCode.USERID_NOT_FOUND));
             if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
                 throw new CustomException(ErrorCode.INVALID_PASSWORD);
             }
             return tokenProvider.createToken(loginRequest.getUserid());
-        }
     }
 
     @Override
