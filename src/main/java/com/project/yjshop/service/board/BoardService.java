@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface BoardService {
     BoardProductResponse posting(BoardProductRequest boardProductRequest,
-                                 BindingResult bindingResult,
                                  AuthDetails authDetails) throws IOException;
     BoardProductResponse deleting(Integer boardId, AuthDetails authDetails);
     List<Board> findAll();

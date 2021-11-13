@@ -26,9 +26,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
+<<<<<<< HEAD
     public void join(JoinRequest joinRequest) {
 
             if (userRepository.existsByUseridOrNickname(joinRequest.getUserid(), joinRequest.getNickname()))
+=======
+    public CustomResponse<?> join(JoinRequest joinRequest) {
+
+            if (userRepository.existsByUseridOrNickname(joinRequest.getUserid(), joinRequest.getNickname())) {
+>>>>>>> main
                 throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
 
             userRepository.save(
@@ -40,18 +46,36 @@ public class AuthServiceImpl implements AuthService {
                             .money(0)
                             .role(UserRole.USER)
                             .build());
+<<<<<<< HEAD
+=======
+
+            return CustomResponse.builder()
+                    .key(userRepository.findByUserid(joinRequest.getUserid()).get().getId())
+                    .message("회원가입 성공")
+                    .build();
+>>>>>>> main
     }
 
 
     @Override
     @Transactional
     public TokenResponse login(LoginRequest loginRequest) {
+<<<<<<< HEAD
         User userEntity = userRepository.findByUserid(loginRequest.getUserid())
                 .orElseThrow(() -> new CustomException(ErrorCode.USERID_NOT_FOUND));
         if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
         return tokenProvider.createToken(loginRequest.getUserid());
+=======
+
+            User userEntity = userRepository.findByUserid(loginRequest.getUserid())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USERID_NOT_FOUND));
+            if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
+                throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            }
+            return tokenProvider.createToken(loginRequest.getUserid());
+>>>>>>> main
     }
 
     @Override

@@ -33,9 +33,10 @@ spring:
 jwt:
   header: ${JWT_HEADER}
   prefix: ${JWT_PREFIX}
-  secret: ${JWT_SECRET}
-  access: ${ACC_TIME}
-  refresh: ${REF_TIME}
+  secretKey: ${JWT_SECRET}
+  accessExp: ${ACC_TIME}
+  refreshExp: ${REF_TIME}
+
 cloud:
   aws:
     credentials:
