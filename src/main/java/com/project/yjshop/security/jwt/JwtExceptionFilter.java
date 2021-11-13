@@ -2,11 +2,7 @@ package com.project.yjshop.security.jwt;
 
 import com.project.yjshop.error.CMRespDto;
 import com.project.yjshop.error.exception.CustomException;
-import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

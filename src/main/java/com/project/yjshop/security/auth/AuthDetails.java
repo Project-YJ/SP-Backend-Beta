@@ -2,7 +2,6 @@ package com.project.yjshop.security.auth;
 
 import com.project.yjshop.domain.user.User;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
