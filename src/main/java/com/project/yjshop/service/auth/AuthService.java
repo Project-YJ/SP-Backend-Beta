@@ -7,11 +7,7 @@ import com.project.yjshop.web.payload.response.auth.TokenResponse;
 import org.springframework.validation.BindingResult;
 
 public interface AuthService {
-<<<<<<< HEAD
     void join(JoinRequest joinRequest);
-=======
-    CustomResponse<?> join(JoinRequest joinRequest);
->>>>>>> main
     TokenResponse login(LoginRequest loginRequest);
     TokenResponse reissue(String token);
 }
