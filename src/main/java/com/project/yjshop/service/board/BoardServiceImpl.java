@@ -40,8 +40,8 @@ public class BoardServiceImpl implements BoardService{
 
             Board saveBoard = boardRepository.save(Board.builder()
                     .title(boardProductRequest.getTitle())
-//                    .titleImage(imageRepository.findByImagePath(imageService
-//                            .imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
+                    .titleImage(imageRepository.findByImagePath(imageService
+                            .imageUpload(s3Service.upload(boardProductRequest.getTitleImage()))).get())
                     .price(boardProductRequest.getPrice())
                     .count(boardProductRequest.getCount())
                     .user(authDetails.getUser())
