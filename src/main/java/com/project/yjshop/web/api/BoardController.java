@@ -25,7 +25,6 @@ public class BoardController {
     @PostMapping("/product/")
     public BoardProductResponse postProduct(@ModelAttribute @Valid BoardProductRequest product,
                                             @AuthenticationPrincipal AuthDetails authDetails) throws IOException {
-        System.out.println("dkslanjspe");
         return boardService.posting(product, authDetails);
     }
 

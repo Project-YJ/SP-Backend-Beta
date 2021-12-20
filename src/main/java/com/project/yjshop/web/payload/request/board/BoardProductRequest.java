@@ -2,6 +2,8 @@ package com.project.yjshop.web.payload.request.board;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.util.annotation.Nullable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,7 +23,7 @@ public class BoardProductRequest {
     @Min(value = 1, message = "상품은 최소 1개여야합니다.")
     private Integer count;
 
-    @NotNull(message = "상품 이미지를 선택해주세요")
+    @Nullable
     private MultipartFile titleImage;
 
     @NotNull(message = "가격을 입력해주세요")
