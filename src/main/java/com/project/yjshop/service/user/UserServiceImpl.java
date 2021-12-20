@@ -8,8 +8,10 @@ import com.project.yjshop.domain.user.basket.Basket;
 import com.project.yjshop.domain.user.basket.BasketRepository;
 import com.project.yjshop.error.ErrorCode;
 import com.project.yjshop.error.exception.CustomException;
+import com.project.yjshop.facade.UserFacade;
 import com.project.yjshop.security.auth.AuthDetails;
 import com.project.yjshop.web.payload.request.user.UserProductRequest;
+import com.project.yjshop.web.payload.response.user.UserPageResponse;
 import com.project.yjshop.web.payload.response.user.UserProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService{
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
+    private final UserFacade userFacade;
 
     @Override
     @Transactional
@@ -92,5 +95,10 @@ public class UserServiceImpl implements UserService{
     @Transactional(readOnly = true)
     public List<Basket> myBasket(AuthDetails authDetails) {
         return basketRepository.findAllByUser(authDetails.getUser());
+    }
+
+    @Override
+    public UserPageResponse getUserPage() {
+        return new UserPageResponse(userFacade.getCurrentTeacher().getNickname());
     }
 }

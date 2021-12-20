@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/page")
     public UserPageResponse userPage() {
-        return null;
+        return userService.getUserPage();
     }
 
     @PostMapping("/purchase")
